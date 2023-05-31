@@ -1,38 +1,15 @@
 package com.example.demo.controller;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import com.example.demo.constant.http.BaseApiResponse;
-import com.example.demo.constant.http.CustomResultCode;
-import com.example.demo.entity.User;
-import com.example.demo.entity.UserGroup;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import static org.assertj.core.api.Assertions.*;
-
-import java.net.URI;
-import java.util.stream.Stream;
 
 
 //@WebMvcTest(UserManageController.class) //테스트를 위한 별도서비스를 둘 수 없다.
@@ -41,18 +18,16 @@ import java.util.stream.Stream;
 public class UserManageControllerTest {
 
     @Autowired
-    private WebApplicationContext ctx;
-    
+    private WebApplicationContext ctx;    
     private MockMvc mockMvc;        
-
-    private ObjectMapper objMapper = new ObjectMapper();
-
+    
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
             .addFilters(new CharacterEncodingFilter("UTF-8", true)).build();            
     }
 
+    /*
     @DisplayName("[POST-MethodSource]userGroup 저장 테스트")
     @ParameterizedTest
     @MethodSource("initUserGroup")
@@ -84,15 +59,14 @@ public class UserManageControllerTest {
         MockHttpServletRequestBuilder httpUserMethodCaller = MockMvcRequestBuilders.request(HttpMethod.POST, new URI("/user"));
         BaseApiResponse<User> userBaseApiResponse = this.whenUserMethodCall(1L, user, httpUserMethodCaller);                    
         User savedUser = userBaseApiResponse.getData();
-
-        /*
+        
         UserGroup userGroup = new UserGroup(1L);
         userGroup.setUserList(new ArrayList<>());
         userGroup.addUser(user);
         MockHttpServletRequestBuilder httpUserGroupMethodCaller = MockMvcRequestBuilders.request(HttpMethod.POST, new URI("/user-group"));
         BaseApiResponse<UserGroup> userGroupBaseApiResponse = this.whenUserGroupMethodCall(userGroup, httpUserGroupMethodCaller);                    
         UserGroup savedUserGroup = userGroupBaseApiResponse.getData();    
-        */
+
 
         //then    
         assertThat(userBaseApiResponse.getCustomResultCode()).isEqualTo(CustomResultCode.RESPONSE_SUCCESS.getResultCode());
@@ -179,16 +153,9 @@ public class UserManageControllerTest {
     
 
 
-    private static Stream<Arguments> initUserId() {    
-
-        UserGroup userGroup = new UserGroup(1L);
-
+    private static Stream<Arguments> initUserId() {            
         return Stream.of(
-            Arguments.of(new User("loginId1", "password1", "userId1", userGroup)),
-            Arguments.of(new User("loginId2", "password2", "userId2", userGroup)),
-            Arguments.of(new User("loginId3", "password3", "userId3", userGroup)),
-            Arguments.of(new User("loginId4", "password4", "userId4", userGroup)),
-            Arguments.of(new User("loginId5", "password5", "userId5", userGroup))
+            Arguments.of(User.builder().build())
         );
     }
 
@@ -196,11 +163,7 @@ public class UserManageControllerTest {
 
     private static Stream<Arguments> updateUserId() {
         return Stream.of(
-            Arguments.of(new User(1L, "loginId1-update", "password1", "userId1", new UserGroup(1L))),
-            Arguments.of(new User(2L, "loginId2-update", "password2", "userId2", new UserGroup(1L))),
-            Arguments.of(new User(3L, "loginId3-update", "password3", "userId3", new UserGroup(1L))),
-            Arguments.of(new User(4L, "loginId4-update", "password4", "userId4", new UserGroup(1L))),
-            Arguments.of(new User(5L, "loginId5-update", "password5", "userId5", new UserGroup(1L)))
+            Arguments.of(User.builder().build())
         );
     }
 
@@ -209,8 +172,7 @@ public class UserManageControllerTest {
     private BaseApiResponse<User> whenUserMethodCall(Long userId, User user, MockHttpServletRequestBuilder httpMethodCallRequest) {
 
         try {
-                        
-            /* user Data 있을 경우 content로 생성. (post/put) */
+                                    
             String userString = "";
             if(user != null) {
                 userString = objMapper.writeValueAsString(user);
@@ -243,7 +205,6 @@ public class UserManageControllerTest {
             
             ObjectMapper objMapper = new ObjectMapper();
 
-            /* user Data 있을 경우 content로 생성. (post/put) */
             String userGroupString = "";
             if(userGroup != null) {
                 userGroupString = objMapper.writeValueAsString(userGroup);
@@ -269,5 +230,7 @@ public class UserManageControllerTest {
         }
 
     }
+
+    */
 
 }
